@@ -1,3 +1,10 @@
 *.kicad_prl
 *-backups/
+*.lck
+~*.lck
+_autosave-*
+fp-info-cache
 __pycache__/
+.history/
+out/*.step
+out/netlist.net

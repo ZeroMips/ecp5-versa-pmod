@@ -1,17 +1,37 @@
-socket,pmod_pin,signal,x4_pin,io,ball,line,resistor
-J2,1,R3,4,IO1,A13,0,R1
-J2,2,R1,6,IO3,C13,2,R3
-J2,3,G3,8,IO5,E13,4,R5
-J2,4,G1,10,IO7,C14,6,R7
-J2,7,R2,3,IO0,A12,1,R2
-J2,8,R0,5,IO2,B13,3,R4
-J2,9,G2,7,IO4,D13,5,R6
-J2,10,G0,9,IO6,A14,7,R8
-J1,1,B3,12,IO9,E14,8,R9
-J1,2,CLK,14,IO11,C10,10,R11
-J1,3,B0,16,IO13,B10,12,R13
-J1,4,HS,18,IO15,E12,14,R15
-J1,7,B2,11,IO8,D14,9,R10
-J1,8,B1,13,IO10,D11,11,R12
-J1,9,DE,15,IO12,A9,13,R14
-J1,10,VS,17,IO14,D12,15,R16
+port,pmod_pin,net,resistor,x4_pin,x4_io,ball,ecp5_pad,pair,clock,dvi_pmod
+A,1,PA1,R1,3,IO0,A12,PT49A,pair with pin 7 (PT49),,R3
+A,2,PA2,R3,5,IO2,B13,PT51A,pair with pin 8 (PT51),,R1
+A,3,PA3,R5,7,IO4,D13,PT53A,pair with pin 9 (PT53),,G3
+A,4,PA4,R7,9,IO6,A14,PT56A,pair with pin 10 (PT56),,G1
+A,5,GND,,"2,19,22,...",GND,,,,,GND
+A,6,3V3,,20 (via F1),3V3,,,,,3V3
+A,7,PA7,R2,4,IO1,A13,PT49B,pair with pin 1 (PT49),,R2
+A,8,PA8,R4,6,IO3,C13,PT51B,pair with pin 2 (PT51),,R0
+A,9,PA9,R6,8,IO5,E13,PT53B,pair with pin 3 (PT53),,G2
+A,10,PA10,R8,10,IO7,C14,PT56B,pair with pin 4 (PT56),,G0
+A,11,GND,,"2,19,22,...",GND,,,,,GND
+A,12,3V3,,20 (via F1),3V3,,,,,3V3
+B,1,PB1,R9,11,IO8,D14,PT58A,pair with pin 7 (PT58),,B3
+B,2,PB2,R11,13,IO10,D11,PT42A/PCLKT1_1,no pair,PCLKT1_1,CLK
+B,3,PB3,R13,15,IO12,A9,PT33A/GR_PCLK0_1,pair with pin 9 (PT33),GR_PCLK0_1,B0
+B,4,PB4,R15,17,IO14,D12,PT47A/GR_PCLK1_0,pair with pin 10 (PT47),GR_PCLK1_0,HS
+B,5,GND,,"2,19,22,...",GND,,,,,GND
+B,6,3V3,,20 (via F1),3V3,,,,,3V3
+B,7,PB7,R10,12,IO9,E14,PT58B,pair with pin 1 (PT58),,B2
+B,8,PB8,R12,14,IO11,C10,PT31B,no pair,,B1
+B,9,PB9,R14,16,IO13,B10,PT33B/GR_PCLK0_0,pair with pin 3 (PT33),GR_PCLK0_0,DE
+B,10,PB10,R16,18,IO15,E12,PT47B/GR_PCLK1_1,pair with pin 4 (PT47),GR_PCLK1_1,VS
+B,11,GND,,"2,19,22,...",GND,,,,,GND
+B,12,3V3,,20 (via F1),3V3,,,,,3V3
+C,1,PC1,R17,21,IO16,B15,PT69A,pair with pin 7 (PT69),,
+C,2,PC2,R19,25,IO18,D15,PT71A,pair with pin 8 (PT71),,
+C,3,PC3,R21,28,IO20,A16,PT74A,pair with pin 9 (PT74),,
+C,4,PC4,R23,31,IO22,C16,PT76A,pair with pin 10 (PT76),,
+C,5,GND,,"2,19,22,...",GND,,,,,GND
+C,6,3V3,,20 (via F1),3V3,,,,,3V3
+C,7,PC7,R18,23,IO17,C15,PT69B,pair with pin 1 (PT69),,
+C,8,PC8,R20,27,IO19,E15,PT71B,pair with pin 2 (PT71),,
+C,9,PC9,R22,29,IO21,B16,PT74B,pair with pin 3 (PT74),,
+C,10,PC10,R24,32,IO23,D16,PT76B,pair with pin 4 (PT76),,
+C,11,GND,,"2,19,22,...",GND,,,,,GND
+C,12,3V3,,20 (via F1),3V3,,,,,3V3

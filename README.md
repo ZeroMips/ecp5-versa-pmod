@@ -1,72 +1,144 @@
-# Versa X4 to Pmod DVI adapter (rev A, DRAFT, not ordered)
+# ecp5-versa-pmod
 
-Plugs onto the Versa expansion header **X4** and carries the two 2x6 Pmod connectors of the 1BitSquared
-iCEBreaker 12-bit DVI Pmod (hardware v1.1a). The module lies coplanar beside the adapter, as on any Pmod host.
-`generate_adapter.py` is the source of truth (KiCad 7 `pcbnew` bindings); `out/` holds the generated board, Gerbers, drill file, placement file and DRC report; `preview/` has renderings.
+Three Pmod host ports for the Lattice **ECP5 Versa** development board, plugged onto its expansion header **X4**.
+A generic adapter, built so that the 1BitSquared **12-bit DVI Pmod** (a dual-wide module) fits exactly on two adjacent ports.
+Rev A, 2026-11-12, not yet ordered. Open source hardware.
+
+![top](preview/top.png)
 
 | Item | Value |
 |---|---|
-| Board | 62.8 x 56.0 mm, 2 layers, 1.6 mm |
-| J3 | 2x20 female socket, 2.54 mm, on the **bottom**, onto X4 (body height decides the stand-off: check against the Versa) |
-| J2, J1 | 2x6 female right-angle Pmod sockets, top side, opening to +x, 22.89 mm apart (the module's J2 above J1) |
-| R1 to R16 | 100 ohm 0603, one per signal, in series |
-| Power | 3V3 from X4 pin 20 only, GND from X4 pins 19 and 22 only; C1 10 uF 0805, C2 and C3 100 nF 0603, D1 and R17 (1 kohm) as a 3V3 LED |
-| Routing | all 16 signals on F.Cu at 1.27 mm pitch (one layer, no crossings), 3V3 on B.Cu, GND pours on both layers |
+| Board | 67.0 x 42.5 mm, 2 layers, 1.6 mm FR-4, rounded corners, no mounting holes (it hangs on the 2x20 socket) |
+| J1 | 2x20 female socket 2.54 mm on the **bottom**, onto X4; stand-off = socket height (8.5 mm) above the X4 header body |
+| J2, J3, J4 | Pmod ports A, B, C: 2x6 female right-angle sockets on the edge that lies over the Versa board edge, 22.86 mm (0.90 in) apart, near pin row 10.16 mm (0.40 in) from the edge, exactly as in the Pmod Interface Specification 1.3.1 figure 5 |
+| Signals | X4 IO0..7 on port A, IO8..15 on port B, IO16..23 on port C, 33 ohm series resistor in every line (R1..R24, 0603) |
+| Power | 3V3 from X4 pin 20 through F1 (0.5 A PTC) to all ports; 10 uF + 3 x 100 nF; green LED |
+| Unused | X4 IO24..28, RESOUT#, CARDSEL# (not connected) |
 
-## Pin map (generated from the board, checked chain by chain)
+## Files
 
-| Socket | Pmod pin | Signal | R | X4 pin | X4 IO | FPGA ball |
-|---|---|---|---|---|---|---|
-| J2 | 1 | R3 | R1 | 4 | IO1 | A13 |
-| J2 | 2 | R1 | R3 | 6 | IO3 | C13 |
-| J2 | 3 | G3 | R5 | 8 | IO5 | E13 |
-| J2 | 4 | G1 | R7 | 10 | IO7 | C14 |
-| J2 | 7 | R2 | R2 | 3 | IO0 | A12 |
-| J2 | 8 | R0 | R4 | 5 | IO2 | B13 |
-| J2 | 9 | G2 | R6 | 7 | IO4 | D13 |
-| J2 | 10 | G0 | R8 | 9 | IO6 | A14 |
-| J1 | 1 | B3 | R9 | 12 | IO9 | E14 |
-| J1 | 2 | CLK | R11 | 14 | IO11 | C10 |
-| J1 | 3 | B0 | R13 | 16 | IO13 | B10 |
-| J1 | 4 | HS | R15 | 18 | IO15 | E12 |
-| J1 | 7 | B2 | R10 | 11 | IO8 | D14 |
-| J1 | 8 | B1 | R12 | 13 | IO10 | D11 |
-| J1 | 9 | DE | R14 | 15 | IO12 | A9 |
-| J1 | 10 | VS | R16 | 17 | IO14 | D12 |
+| Path | Content |
+|---|---|
+| `ecp5-versa-pmod.kicad_pro`, `.kicad_sch`, `.kicad_pcb` | the design (KiCad 10); `lib/` holds the project symbol and footprint libraries, `fp-lib-table` / `sym-lib-table` point to them |
+| `tools/generate.py` | wrote rev A from the pin tables in it (schematic, board, libraries); kept for reproducibility, from now on edit the KiCad files |
+| `tools/check.py` | compares the board nets with the schematic netlist independently of KiCad, checks the DVI Pmod fit, writes `out/pinmap.csv` |
+| `tools/release.sh` | ERC, DRC with schematic parity, the check above, schematic PDF, BOM, Gerbers + drill + placement, 1:1 fit-check PDF, STEP, renders |
+| `out/` | everything `release.sh` produces: `ecp5-versa-pmod-gerber.zip`, `bom.csv`, `ecp5-versa-pmod-pos.csv`, `ecp5-versa-pmod-schematic.pdf`, `ecp5-versa-pmod-fitcheck-top-1to1.pdf`, `pinmap.csv`, `erc.rpt`, `drc.rpt`, STEP |
+| `preview/` | `top.png`, `bottom.png`, `iso.png` |
+| `docs/notes.md` | the facts about the Versa, the Pmod specification and the DVI Pmod that the design rests on, with sources |
 
-Pins 5 and 11 are GND and 6 and 12 are 3V3 on both sockets. The module's J2 is LiteX slot "a", J1 slot "b".
-IO11 to IO13 are in bank 0, the rest in bank 1; both banks run at 3.3 V on the Versa.
+The schematic is one A3 sheet drawn with wires: X4 on the left with IO0..IO23 on its right side in order (grouped per
+port) and 3V3, GND and the unused pins on its left; the 24 series resistors in two staggered columns; the three ports
+on the right with their signal pins in connector column order (1, 7, 2, 8, ...), so every X4 pin pair ends on two
+adjacent port pins and no wire crosses another; the power section (F1, rails, C1..C4, LED) below X4.
 
-## Why it is built this way
-- **Series resistors and power on three pins only.** The 2x20 socket fits in two positions, rotated by 180 degrees. In the wrong one X4 pin 20 meets the adapter's pin 21 (not connected), the adapter's 3V3 net meets IO16 (an input), and both GND pins meet GND pins. Nothing can be shorted; the card just does not work, and only the pin table changes. The 100 ohm resistors also limit the current if gateware drives a pin by mistake.
-- **Pin assignment.** The lines leave X4 in header order and enter the sockets in the same order, so no line crosses another. Any permutation is allowed in the gateware, so the order of this table is fixed by the routing, not by the module.
-- **Pmod orientation.** Taken from the module's own PCB file: in its footprint pad 1 (net R3) is the top pin of J2 when the connector edge faces left, pins 1 to 6 are the column away from the plastic (the upper row of the right-angle header), pins 7 to 12 the column next to it. The adapter's sockets are renumbered to the same positions.
+State of rev A: ERC 0, DRC 0 (all severities, schematic parity included), 0 unconnected, netlist cross-check 0 mismatches.
 
-## Parts (LCSC / JLCPCB numbers, looked up 2026-11-12; also in `out/bom.csv` and in each part's value and `LCSC` field)
-
-| Ref | Part | LCSC | Status found |
-|---|---|---|---|
-| R1 to R16 | 100 ohm 1% 0603, UNI-ROYAL 0603WAF1000T5E | [C22775](https://jlcpcb.com/partdetail/C22775) | Basic (JLCPCB page) |
-| R17 | 1 kohm 1% 0603, UNI-ROYAL 0603WAF1001T5E | [C21190](https://jlcpcb.com/partdetail/C21190) | Basic (JLCPCB page) |
-| C2, C3 | 100 nF 50 V X7R 0603, YAGEO CC0603KRX7R9BB104 | [C14663](https://jlcpcb.com/partdetail/C14663) | Basic (JLCPCB page) |
-| C1 | 10 uF 25 V X5R 0805, Samsung CL21A106KAYNNNE | [C15850](https://jlcpcb.com/partdetail/C15850) | page not readable by our fetch (rate limit); part identity from a search result, Basic status from a forum post: check |
-| D1 | red LED 0603, Hubei KENTO KT-0603R | [C2286](https://jlcpcb.com/partdetail/C2286) | Basic (JLCPCB page); red, about 1.3 mA through R17: dim but visible |
-| J1, J2 | 2x6 female 2.54 mm, right angle, 8.5 mm, HCTL PM254-2-06-W-8.5 | [C2897426](https://www.lcsc.com/product-detail/C2897426.html) | listed "right angle"; class and stock not seen; pin positions vs the footprint **not verified** (the datasheet drawing was not readable) |
-| J3 | 2x20 female 2.54 mm, 8.5 mm insulator, 3.2 mm tail, "ZHOURI" 2.54-2*20 | [C2977589](https://www.lcsc.com/product-detail/C2977589.html) | "holes direction: top", so presumably straight, not stated; extended part per a search result; manufacturer name inconsistent on the page: check |
-
-Stock and prices were not visible in what we could read: check them in the JLCPCB parts library before ordering. The connectors are through-hole: plan to solder them by hand (JLCPCB assembles through-hole parts only as a special service). If the 8.5 mm J3 is too tall or short for the Versa, take another 2x20 socket and keep the footprint.
-
-## Check before ordering (the open points)
-1. **X4 pin 1.** The board assumes pin 1 at the top left when the adapter is seen from above, with the Pmod sockets to the right. Read the silkscreen of the Versa at X4 and confirm which end is pin 1 and which row (odd or even) is nearer the board edge. If it is wrong, the adapter still cannot be damaged (see above), but the module would stand where the Versa has no room; then the generator needs a mirrored variant.
-2. **Room.** The module is 41.0 x 40.8 mm and hangs off to the right of the adapter, at the height of the socket. Check that nothing of the Versa (connectors, heat sink, the other header) is in that space.
-3. **1:1 print.** Print `preview/fitcheck_top_1to1.svg` at 100 percent, lay the module's connector next to it, and check the 22.89 mm spacing and that the sockets' rows match the module's header rows. With a multimeter on the module: J2 pin 1 (R3) must be the pin nearest to the module's top edge in the picture of its PCB.
-4. **Parts.** Compare the drawing of the chosen right-angle socket (C2897426 or another) with KiCad's `PinSocket_2x06_P2.54mm_Horizontal`: pad positions, which column is the upper row, and where the plastic ends. The 2x20 socket height decides the stand-off to the Versa.
-5. **Gerber review.** `out/gerber/` was only inspected as renderings; load it in a viewer before ordering.
-
-## Reproduce
 ```sh
-python3 generate_adapter.py      # system python with the pcbnew bindings (KiCad 7.0.11 tested)
+sh tools/release.sh          # verify and regenerate all outputs (kicad-cli 10)
+python3 tools/generate.py    # regenerate the KiCad files from the tables (python3 with KiCad 10 pcbnew)
 ```
-Zone filling in KiCad 7.0.11 crashes on an in-memory board, so the script saves, reloads and fills.
-DRC: `pcbnew.WriteDRCReport` on the saved board gives 0 errors and 0 unconnected pads; the 24 remaining warnings say that the footprints are not linked to a library table.
-No schematic was drawn: the nets come from the script, which is the netlist.
+
+## How it sits on the Versa
+
+X4 runs along the Versa's top edge (the edge opposite the PCIe fingers), about 1 mm from it, with X3 25 mm further in.
+X4 pin 1 is at the left end in the row nearer X3 (triangle on the Versa silkscreen), so the even pins face the board edge.
+The adapter plugs on with its component side up, `X4 pin 1` marked bottom left; its port edge then lies over the Versa's
+board edge and the modules hang outside the Versa, coplanar, about 11 mm above the Versa's surface. The adapter extends
+2.8 mm beyond X4 toward X3 (X3 is 25 mm away) and 14 mm beyond the right end of X4, which is beyond the Versa's right edge.
+Nothing of the Versa is in the way of a module on any port.
+
+Reverse insertion (adapter rotated 180 degrees on X4) is harmless: the adapter's 3V3 lands on IO16, its GND pins on GND
+pins, and its signal lines on IO17..27, CARDSEL# and GND pins through the series resistors. The ports just stay dead.
+
+## Pin map (generated, `out/pinmap.csv`)
+
+Pins 5 and 11 of every port are GND, pins 6 and 12 are 3V3. Pins 1..6 are the upper row (farther from the Versa edge),
+7..12 the lower row; pin 1 is at the left end of the upper row when the Versa edge is at the top.
+
+| Port | Pmod pin | X4 pin | X4 signal | FPGA ball | ECP5 pad | Pair | DVI Pmod (A+B) |
+|---|---|---|---|---|---|---|---|
+| A | 1 | 3 | IO0 | A12 | PT49A | with pin 7 (PT49) | R3 |
+| A | 2 | 5 | IO2 | B13 | PT51A | with pin 8 (PT51) | R1 |
+| A | 3 | 7 | IO4 | D13 | PT53A | with pin 9 (PT53) | G3 |
+| A | 4 | 9 | IO6 | A14 | PT56A | with pin 10 (PT56) | G1 |
+| A | 7 | 4 | IO1 | A13 | PT49B | with pin 1 (PT49) | R2 |
+| A | 8 | 6 | IO3 | C13 | PT51B | with pin 2 (PT51) | R0 |
+| A | 9 | 8 | IO5 | E13 | PT53B | with pin 3 (PT53) | G2 |
+| A | 10 | 10 | IO7 | C14 | PT56B | with pin 4 (PT56) | G0 |
+| B | 1 | 11 | IO8 | D14 | PT58A | with pin 7 (PT58) | B3 |
+| B | 2 | 13 | IO10 | D11 | PT42A/PCLKT1_1 | no pair | CLK |
+| B | 3 | 15 | IO12 | A9 | PT33A/GR_PCLK0_1 | with pin 9 (PT33) | B0 |
+| B | 4 | 17 | IO14 | D12 | PT47A/GR_PCLK1_0 | with pin 10 (PT47) | HS |
+| B | 7 | 12 | IO9 | E14 | PT58B | with pin 1 (PT58) | B2 |
+| B | 8 | 14 | IO11 | C10 | PT31B | no pair | B1 |
+| B | 9 | 16 | IO13 | B10 | PT33B/GR_PCLK0_0 | with pin 3 (PT33) | DE |
+| B | 10 | 18 | IO15 | E12 | PT47B/GR_PCLK1_1 | with pin 4 (PT47) | VS |
+| C | 1 | 21 | IO16 | B15 | PT69A | with pin 7 (PT69) |  |
+| C | 2 | 25 | IO18 | D15 | PT71A | with pin 8 (PT71) |  |
+| C | 3 | 28 | IO20 | A16 | PT74A | with pin 9 (PT74) |  |
+| C | 4 | 31 | IO22 | C16 | PT76A | with pin 10 (PT76) |  |
+| C | 7 | 23 | IO17 | C15 | PT69B | with pin 1 (PT69) |  |
+| C | 8 | 27 | IO19 | E15 | PT71B | with pin 2 (PT71) |  |
+| C | 9 | 29 | IO21 | B16 | PT74B | with pin 3 (PT74) |  |
+| C | 10 | 32 | IO23 | D16 | PT76B | with pin 4 (PT76) |  |
+
+Each port column (n, n+6) is one ECP5 differential pair with the true half (PIOA) on pin n, except port B column 2
+(IO10/IO11). IO10 on port B pin 2 is `PCLKT1_1`, a primary clock input: use port B pin 2 for a Pmod that supplies a clock.
+IO12..15 are general-routing clock inputs. All X4 IOs are 3.3 V LVCMOS (banks 0 and 1 of the LFE5UM-45F).
+
+Any gateware pin assignment is allowed; `docs/notes.md` has the balls as a LiteX/Amaranth style connector table.
+
+## Design notes
+
+- **Why column pairs.** The X4 pin pairs (3,4), (5,6) ... are ECP5 A/B pairs, so wiring one X4 pair to one Pmod column
+  gives differential-capable columns with every line on the top layer and no vias. Digilent's digital high-speed ports pair
+  pins 1-2 instead; that would need a second routing layer under the signals and was not worth it.
+- **33 ohm series resistors** (not Digilent's 200 ohm): source termination that works for the 25 MHz DVI pixel bus and for
+  faster modules (HyperRAM), while still limiting the current of an accidental driver conflict. 0 ohm or 200 ohm fit the
+  same footprint.
+- **F1, 0.5 A PTC.** X4 has a single 3V3 pin. Three modules at the specification's ~100 mA stay below the hold current; a
+  shorted module trips F1 instead of dragging the Versa's rail. About 50 mV drop at 100 mA.
+- **3V3 feed.** X4 pin 20 sits in the inner row, so the feed has to pass between two socket pads (0.84 mm gap). It
+  leaves on both layers at 0.4 mm, the widest the gap allows, and both copies run along the bottom edge (where no
+  signal return current flows) and straight up into F1, 2 x 0.5 mm: no point narrower than the trunk.
+- **Ground.** Pours on both layers; the X4 socket's eight GND pins are tied together by a 0.4 mm track on the bottom
+  (no pour fits between 2.54 mm pins), the port GND pins have thermal reliefs.
+- **Series resistors at the FPGA end** (right above X4), doglegs at 60 degrees so the three bundles never cross.
+- **Silkscreen.** Top: port names, pin 1/7 marks, the X4 IO numbers of every signal column, GND/3V3, the X4 pin 1 corner,
+  the F1 and LED labels. Bottom: the full pin table with FPGA balls, the X4 pin 1 corner. OSHW logo on both sides.
+  All labels are generated from the same table as the netlist.
+
+## 12-bit DVI Pmod (1BitSquared, hardware v1.1a)
+
+Module J2 (LiteX slot "a": R3 R1 G3 G1 / R2 R0 G2 G0) goes on **port A**, module J1 (slot "b": B3 CLK B0 HS / B2 B1 DE VS)
+on **port B**; ports B+C work the same way. The module's connectors are 22.89 mm apart, the adapter's 22.86 mm (0.03 mm,
+nothing at 2.54 mm pitch); `tools/check.py` recomputes this from the module's PCB coordinates. The module then hangs
+40 mm beyond the Versa edge, its HDMI jack away from the Versa. The last column of the table above gives the module
+signal on every adapter pin.
+
+## Parts (`out/bom.csv`; LCSC numbers also in the schematic fields)
+
+| Ref | Part | LCSC | Checked 2026-11-12 |
+|---|---|---|---|
+| R1..R24 | 33 ohm 1% 0603, UNI-ROYAL 0603WAF330JT5E | C23140 | part page read; Basic/Extended not shown on it |
+| R25 | 1 kohm 0603, UNI-ROYAL 0603WAF1001T5E | C21190 | Basic (page read in the earlier session) |
+| C1 | 10 uF 25 V X5R 0805, Samsung CL21A106KAYNNNE | C15850 | part page read; Basic/Extended not shown |
+| C2..C4 | 100 nF 50 V X7R 0603, YAGEO CC0603KRX7R9BB104 | C14663 | Basic (earlier session) |
+| D1 | green LED 0603, Everlight 19-217/GHC-YR1S2/3T | C72043 | page read, **Extended**; any 0603 LED fits, the 1 k gives about 0.6 mA |
+| F1 | PTC resettable fuse 1206, Ihold 0.5 A, 16 V or more (Bourns MF-MSMF050-2, Littelfuse 1206L050, Techfuse nSMD050) | pick in the JLCPCB library | **not chosen**; C70069 turned out to be a 250 mA part |
+| J1 | 2x20 female 2.54 mm, 8.5 mm insulator, 3.2 mm tails, ZHOURI 2.54-2*20 | C2977589 | page read; straight socket inferred from "holes direction: top" |
+| J2..J4 | 2x6 female right angle 2.54 mm, 8.5 mm insulator, HCTL PM254-2-06-W-8.5 | C2897426 | page read (2 rows, 12 pins, right angle, 3 A); the **drawing was not readable**, compare it with KiCad's `PinSocket_2x06_P2.54mm_Horizontal` before ordering |
+
+Stock and prices were not visible to the tools used. The sockets are through-hole (JLCPCB assembles them only as a
+special service, or solder them by hand). Choose the 2x20 socket height to taste; 8.5 mm puts the module 11 mm above
+the Versa.
+
+## Before ordering
+
+1. Print `out/ecp5-versa-pmod-fitcheck-top-1to1.pdf` at 100 % and lay the DVI Pmod's connectors on it (J2 on A, J1 on B).
+2. Compare the right-angle socket's drawing with the footprint (pin rows 2.54 mm apart, near row 10.16 mm from the edge,
+   body front flush with the edge) and pick the PTC.
+3. Load `out/ecp5-versa-pmod-gerber.zip` in a Gerber viewer once (it was checked by DRC and by the renders only).
+4. Check that the Versa's X4 pin 1 is where `docs/notes.md` says (lower left, square pad with a triangle); if it were in the
+   outer row the adapter would have to be mirrored (`tools/generate.py` keeps this in two constants).

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "ecp5-versa-pmod")(type "KiCad")(uri "${KIPRJMOD}/lib/ecp5-versa-pmod.pretty")(options "")(descr "project footprints"))
+)

@@ -1,8 +1,11 @@
-Designators,Qty,Value,Footprint,LCSC,MPN
-C1,1,10uF,C_0805_2012Metric,C15850,CL21A106KAYNNNE (Samsung)
-"C2,C3",2,100nF,C_0603_1608Metric,C14663,CC0603KRX7R9BB104 (YAGEO)
-D1,1,LED red,LED_0603_1608Metric,C2286,KT-0603R (Hubei KENTO)
-"J1,J2",2,2x6 female RA,PinSocket_2x06_P2.54mm_Horizontal,C2897426,PM254-2-06-W-8.5 (HCTL)
-J3,1,2x20 female 8.5mm,PinSocket_2x20_P2.54mm_Vertical,C2977589,2.54-2*20 (ZHOURI)
-"R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,R13,R14,R15,R16",16,100,R_0603_1608Metric,C22775,0603WAF1000T5E (UNI-ROYAL)
-R17,1,1k,R_0603_1608Metric,C21190,0603WAF1001T5E (UNI-ROYAL)
+"Refs","Value","Footprint","LCSC","MPN","Description","Qty"
+"C1","10uF","Capacitor_SMD:C_0805_2012Metric","C15850","Samsung CL21A106KAYNNNE","10 uF 25 V X5R 0805","1"
+"C2-C4","100nF","Capacitor_SMD:C_0603_1608Metric","C14663","YAGEO CC0603KRX7R9BB104","100 nF 50 V X7R 0603, one per port","3"
+"D1","GREEN","LED_SMD:LED_0603_1608Metric","C72043","Everlight 19-217/GHC-YR1S2/3T","green LED 0603, 3V3 indicator","1"
+"F1","0.5A","Fuse:Fuse_1206_3216Metric","","PTC 1206 Ihold 0.5 A","resettable fuse in the 3V3 feed from X4 pin 20","1"
+"J1","Versa X4","Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical","C2977589","ZHOURI 2.54-2*20","2x20 female socket 2.54 mm, 8.5 mm, bottom side, onto Versa X4","1"
+"J2","PMOD A","ecp5-versa-pmod:Pmod_Host_2x06_Horizontal","C2897426","HCTL PM254-2-06-W-8.5","Pmod host port A, 2x6 female right angle 2.54 mm","1"
+"J3","PMOD B","ecp5-versa-pmod:Pmod_Host_2x06_Horizontal","C2897426","HCTL PM254-2-06-W-8.5","Pmod host port B, 2x6 female right angle 2.54 mm","1"
+"J4","PMOD C","ecp5-versa-pmod:Pmod_Host_2x06_Horizontal","C2897426","HCTL PM254-2-06-W-8.5","Pmod host port C, 2x6 female right angle 2.54 mm","1"
+"R1-R24","33R","Resistor_SMD:R_0603_1608Metric","C23140","UNI-ROYAL 0603WAF330JT5E","33 ohm 0603, series resistor in every Pmod signal","24"
+"R25","1k","Resistor_SMD:R_0603_1608Metric","C21190","UNI-ROYAL 0603WAF1001T5E","1 k 0603, LED","1"
