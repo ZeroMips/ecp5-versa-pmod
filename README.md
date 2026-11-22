@@ -2,7 +2,7 @@
 
 Three Pmod host ports for the Lattice **ECP5 Versa** development board, plugged onto its expansion header **X4**.
 A generic adapter, built so that the 1BitSquared **12-bit DVI Pmod** (a dual-wide module) fits exactly on two adjacent ports.
-Rev A, 2026-11-12, not yet ordered. Open source hardware.
+Rev A, designed 2026-11-12, built and tested (see [Commissioning](#commissioning)). Open source hardware.
 
 ![top](preview/top.png)
 
@@ -119,26 +119,44 @@ signal on every adapter pin.
 
 ## Parts (`out/bom.csv`; LCSC numbers also in the schematic fields)
 
-| Ref | Part | LCSC | Checked 2026-11-12 |
-|---|---|---|---|
-| R1..R24 | 33 ohm 1% 0603, UNI-ROYAL 0603WAF330JT5E | C23140 | part page read; Basic/Extended not shown on it |
-| R25 | 1 kohm 0603, UNI-ROYAL 0603WAF1001T5E | C21190 | Basic (page read in the earlier session) |
-| C1 | 10 uF 25 V X5R 0805, Samsung CL21A106KAYNNNE | C15850 | part page read; Basic/Extended not shown |
-| C2..C4 | 100 nF 50 V X7R 0603, YAGEO CC0603KRX7R9BB104 | C14663 | Basic (earlier session) |
-| D1 | green LED 0603, Everlight 19-217/GHC-YR1S2/3T | C72043 | page read, **Extended**; any 0603 LED fits, the 1 k gives about 0.6 mA |
-| F1 | PTC resettable fuse 1206, Ihold 0.5 A, 16 V or more (Bourns MF-MSMF050-2, Littelfuse 1206L050, Techfuse nSMD050) | pick in the JLCPCB library | **not chosen**; C70069 turned out to be a 250 mA part |
-| J1 | 2x20 female 2.54 mm, 8.5 mm insulator, 3.2 mm tails, ZHOURI 2.54-2*20 | C2977589 | page read; straight socket inferred from "holes direction: top" |
-| J2..J4 | 2x6 female right angle 2.54 mm, 8.5 mm insulator, HCTL PM254-2-06-W-8.5 | C2897426 | page read (2 rows, 12 pins, right angle, 3 A); the **drawing was not readable**, compare it with KiCad's `PinSocket_2x06_P2.54mm_Horizontal` before ordering |
+LCSC is the JLCPCB assembly source. The Reichelt and Conrad columns are the parts actually ordered for hand assembly
+(prices as ordered, 2026-11). The Reichelt parts are substitutes with the same value and package, not the same manufacturer parts.
 
-Stock and prices were not visible to the tools used. The sockets are through-hole (JLCPCB assembles them only as a
+| Ref | Part | LCSC | Reichelt (qty, price) | Conrad |
+|---|---|---|---|---|
+| R1..R24 | 33 ohm 1% 0603 | C23140 (UNI-ROYAL 0603WAF330JT5E) | VIS CRCW060333R, 100 mW (50, 0,04 EUR) | |
+| R25 | 1 kohm 1% 0603 | C21190 (UNI-ROYAL 0603WAF1001T5E) | WAL WR06X1001FTL, 100 mW (5, 0,02 EUR) | |
+| C1 | 10 uF 0805 | C15850 (Samsung CL21A106KAYNNNE, X5R 25 V) | CL21B106KOQNNNE, X7R 16 V, 10 %, 1,25 mm high (5, 0,27 EUR) | |
+| C2..C4 | 100 nF 0603 | C14663 (YAGEO CC0603KRX7R9BB104, X7R 50 V) | X7R-G0603 100N, X7R 16 V, 10 % (10, 0,03 EUR) | |
+| D1 | green LED 0603 | C72043 (Everlight 19-217/GHC-YR1S2/3T, **Extended**) | LED EL 0603 GR1, 112 mcd, 120 deg (5, 0,07 EUR) | |
+| F1 | PTC resettable fuse 1206, Ihold 0.5 A | **not chosen** in the JLCPCB library; C70069 turned out to be a 250 mA part | SMD1206P050TF, 0.5 A, **6 V** (5, 0,14 EUR) | |
+| J1 | 2x20 female 2.54 mm, straight | C2977589 (ZHOURI 2.54-2*20, 8.5 mm insulator, 3.2 mm tails) | MPE 094-2-040 (2, 1,10 EUR) | |
+| J2..J4 | 2x6 female right angle 2.54 mm | C2897426 (HCTL PM254-2-06-W-8.5) | | econ connect BLW2X6 (Conrad shows 1 St. per item) |
+
+Checked 2026-11-12 for the LCSC parts: R1..R24, C1 and D1 part pages read (Basic/Extended not shown, except D1 is Extended);
+R25 and C2..C4 Basic (earlier session); J1 page read, straight socket inferred from "holes direction: top"; J2..J4 page
+read (2 rows, 12 pins, right angle, 3 A), the **drawing was not readable**. Any 0603 LED fits D1, the 1 k gives about 0.6 mA.
+
+The Reichelt and Conrad parts above were used for the built and tested rev A board and fit. The JLCPCB-side LCSC parts
+were not ordered. The F1 part is rated 6 V, which is enough on the 3.3 V rail but not for a 5 V source; the earlier note
+asked for 16 V or more.
+
+LCSC stock and prices were not visible to the tools used. The sockets are through-hole (JLCPCB assembles them only as a
 special service, or solder them by hand). Choose the 2x20 socket height to taste; 8.5 mm puts the module 11 mm above
 the Versa.
 
-## Before ordering
+## Commissioning
+
+Rev A was assembled by hand with the Reichelt and Conrad parts listed above and tested on an ECP5 Versa by the author
+(2026-11-22): it works. The individual test steps were not recorded. The silkscreen copyright text on the front
+(`(c) 2026 Dirk Eibach`, 90 degrees at the left edge) was added to the PCB after the rev A Gerbers in `out/` were generated, so
+the board that was built does not have it; rerun `tools/release.sh` before the next order.
+
+### Checks before ordering (rev A)
 
 1. Print `out/ecp5-versa-pmod-fitcheck-top-1to1.pdf` at 100 % and lay the DVI Pmod's connectors on it (J2 on A, J1 on B).
-2. Compare the right-angle socket's drawing with the footprint (pin rows 2.54 mm apart, near row 10.16 mm from the edge,
-   body front flush with the edge) and pick the PTC.
+2. Compare the right-angle socket's drawing (HCTL and the Conrad BLW2X6) with the footprint (pin rows 2.54 mm apart, near
+   row 10.16 mm from the edge, body front flush with the edge), and the MPE 094-2-040 height with the 8.5 mm assumed.
 3. Load `out/ecp5-versa-pmod-gerber.zip` in a Gerber viewer once (it was checked by DRC and by the renders only).
 4. Check that the Versa's X4 pin 1 is where `docs/notes.md` says (lower left, square pad with a triangle); if it were in the
    outer row the adapter would have to be mirrored (`tools/generate.py` keeps this in two constants).

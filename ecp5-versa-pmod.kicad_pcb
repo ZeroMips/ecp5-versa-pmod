@@ -10987,6 +10987,17 @@
 			(justify mirror)
 		)
 	)
+	(gr_text "© 2026 Dirk Eibach"
+		(at 3 23 90)
+		(layer "F.SilkS")
+		(uuid "6f0c2b8e-3d51-4a97-b2e4-9c1a7d5e8f30")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
 	(segment
 		(start 27.13 33.174999)
 		(end 27.13 28.9)
