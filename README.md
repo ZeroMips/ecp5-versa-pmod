@@ -155,8 +155,9 @@ the board that was built does not have it; rerun `tools/release.sh` before the n
 ### Checks before ordering (rev A)
 
 1. Print `out/ecp5-versa-pmod-fitcheck-top-1to1.pdf` at 100 % and lay the DVI Pmod's connectors on it (J2 on A, J1 on B).
-2. Compare the right-angle socket's drawing (HCTL and the Conrad BLW2X6) with the footprint (pin rows 2.54 mm apart, near
-   row 10.16 mm from the edge, body front flush with the edge), and the MPE 094-2-040 height with the 8.5 mm assumed.
+2. Compare the sockets with the footprints (right-angle socket: pin rows 2.54 mm apart, near row 10.16 mm from the edge,
+   body front flush with the edge; J1 height 8.5 mm). **Done with the built board:** the Conrad BLW2X6 (J2..J4) and the
+   Reichelt MPE 094-2-040 (J1) fit. The HCTL PM254-2-06-W-8.5 (C2897426) was not tried. The PTC was picked (SMD1206P050TF).
 3. Load `out/ecp5-versa-pmod-gerber.zip` in a Gerber viewer once (it was checked by DRC and by the renders only).
 4. Check that the Versa's X4 pin 1 is where `docs/notes.md` says (lower left, square pad with a triangle); if it were in the
    outer row the adapter would have to be mirrored (`tools/generate.py` keeps this in two constants).
