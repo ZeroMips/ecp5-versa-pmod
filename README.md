@@ -6,6 +6,10 @@ Rev A, designed 2026-11-12, built and tested (see [Commissioning](#commissioning
 
 ![top](preview/top.png)
 
+Rev A built and plugged onto the ECP5 Versa (X4), with the 12-bit DVI Pmod on ports A and B:
+
+![rev A on the Versa with the 12-bit DVI Pmod](preview/built.jpg)
+
 | Item | Value |
 |---|---|
 | Board | 67.0 x 42.5 mm, 2 layers, 1.6 mm FR-4, rounded corners, no mounting holes (it hangs on the 2x20 socket) |
@@ -149,8 +153,8 @@ the Versa.
 
 Rev A was assembled by hand with the Reichelt and Conrad parts listed above and tested on an ECP5 Versa by the author
 (2026-11-22): it works. The individual test steps were not recorded. The silkscreen copyright text on the front
-(`(c) 2026 Dirk Eibach`, 90 degrees at the left edge) was added to the PCB after the rev A Gerbers in `out/` were generated, so
-the board that was built does not have it; rerun `tools/release.sh` before the next order.
+(`(c) 2026 Dirk Eibach`, 90 degrees at the left edge) is on the built board (see the photo), but the Gerbers in `out/` were generated before it was added to
+the PCB; rerun `tools/release.sh` so that `out/` matches the board.
 
 ### Checks before ordering (rev A)
 
